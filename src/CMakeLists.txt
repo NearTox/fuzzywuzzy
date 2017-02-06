@@ -1,0 +1,5 @@
+file(GLOB_RECURSE SOURCES RELATIVE ${PROJECT_SOURCE_DIR}/src *.c[p]*)
+
+set(APP_INCLUDE_DIRS ${APP_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/include)
+
+add_library(fuzzywuzzy ${SOURCES})
