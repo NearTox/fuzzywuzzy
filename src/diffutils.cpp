@@ -26,7 +26,7 @@ vector<matching_block> matching_blocks(const vector<op_code> ops, const size_t l
 
     for (i = ops.size(); i;) {
         /* Simply pretend there are no keep blocks. */
-        while ((*o).type == keep && --i)
+        while (o->type == keep && --i)
             o++;
 
         if (!i)
