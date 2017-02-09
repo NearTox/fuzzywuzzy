@@ -1,3 +1,12 @@
+# Joins arguments and places the results in ${result_var}.
+function(join result_var)
+  set(result )
+  foreach (arg ${ARGN})
+    set(result "${result}${arg}")
+  endforeach ()
+  set(${result_var} "${result}" PARENT_SCOPE)
+endfunction()
+
 message(STATUS "CMake version: ${CMAKE_VERSION}")
 
 cmake_minimum_required(VERSION 3.0)
@@ -18,19 +27,23 @@ if (NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release CACHE STRING ${doc})
 endif()
 
-option(FMT_TEST "Generate the test target." ${MASTER_PROJECT})
-option(FMT_USE_CPP17 "Enable C++17 features" ON)
+option(FUZZ_TEST "Generate the test target." ${MASTER_PROJECT})
 
-project(fuzzywuzzy)
+project(fuzzywuzzy LANGUAGES CXX)
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-include(cxx11)
 
 if (CMAKE_COMPILER_IS_GNUCXX OR (CMAKE_CXX_COMPILER_ID MATCHES "Clang"))
   set(PEDANTIC_COMPILE_FLAGS -Wall -Wextra -Wshadow -pedantic)
 endif()
+
+set(CMAKE_MODULE_PATH
+  ${CMAKE_MODULE_PATH}
+  ${PROJECT_SOURCE_DIR}/cmake)
+
+include(utils)
 
 add_subdirectory(src)
 

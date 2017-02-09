@@ -14,25 +14,25 @@ double ratio(const string_view &s1, const string_view &s2)
     return (lensum - edit_dist) / static_cast<double>(lensum);
 }
 
-vector<matching_block> matching_blocks(const vector<op_code> &ops, const size_t len1, const size_t len2)
+vector<matching_block> matching_blocks(const vector<op_code> ops, const size_t len1, const size_t len2)
 {
     size_t matching_blocks_count = 0,
            spos = 0,  // source position
            dpos = 0,  // destination position
            i;
 
-    edit_type type = edit_type.keep;
-    auto o = ops.begin();
+    edit_type type = keep;
+    auto o = ops.cbegin();
 
     for (i = ops.size(); i;) {
         /* Simply pretend there are no keep blocks. */
-        while (o.type == edit_type.keep && --i)
+        while ((*o).type == keep && --i)
             o++;
 
         if (!i)
             break;
 
-        if (spos < o.spos || dpos < o.dpos) {
+        if (spos < (*o).spos || dpos < (*o).dpos) {
             /* Matching block found! */
             matching_blocks_count++;
             spos = o.spos;
@@ -54,7 +54,7 @@ vector<matching_block> matching_blocks(const vector<op_code> &ops, const size_t 
                 } while (condition);
                 break;
 
-            case edit_type.remove:
+            case edit_type.erase:
                 do {
                     spos++;
                     i--;
@@ -119,7 +119,7 @@ vector<matching_block> matching_blocks(const vector<op_code> &ops, const size_t 
                 } while (condition);
                 break;
 
-            case edit_type.remove:
+            case edit_type.erase:
                 do {
                     spos++;
                     i--;
